@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "coloringbook-backend/server.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "coloringbook-backend/**"
+      }
+    },
+    {
+      "src": "coloringbook-frontend/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/coloringbook-backend/server.js"
+    },
+    {
+      "source": "/health",
+      "destination": "/coloringbook-backend/server.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/coloringbook-frontend/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "X-Requested-With, Content-Type, Authorization"
+        }
+      ]
+    }
+  ]
+}

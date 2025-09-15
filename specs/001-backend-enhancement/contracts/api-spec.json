@@ -1,0 +1,868 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Forkable AI Framework API (MVP)",
+    "description": "API specification for the forkable AI framework backend MVP with Gemini 2.5 nano integration",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Forkable AI Framework Team",
+      "email": "support@forkable-ai.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.forkable-ai.com",
+      "description": "Production server"
+    },
+    {
+      "url": "https://staging-api.forkable-ai.com",
+      "description": "Staging server"
+    },
+    {
+      "url": "http://localhost:3001",
+      "description": "Development server"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check endpoint",
+        "description": "Returns the health status of the API",
+        "tags": ["System"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "API is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/process-image": {
+      "post": {
+        "summary": "Process image with AI",
+        "description": "Process an image using the configured AI provider",
+        "tags": ["AI Processing"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageProcessingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Image processed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageProcessingResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/profile": {
+      "get": {
+        "summary": "Get user profile",
+        "description": "Retrieve the current user's profile information",
+        "tags": ["User Management"],
+        "responses": {
+          "200": {
+            "description": "User profile retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user profile",
+        "description": "Update the current user's profile information",
+        "tags": ["User Management"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfileUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User profile updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/billing/status": {
+      "get": {
+        "summary": "Get billing status",
+        "description": "Retrieve the current user's billing and subscription status",
+        "tags": ["Billing"],
+        "responses": {
+          "200": {
+            "description": "Billing status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/billing/upgrade": {
+      "post": {
+        "summary": "Upgrade subscription",
+        "description": "Upgrade the user's subscription plan",
+        "tags": ["Billing"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscriptionUpgrade"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscription upgraded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingStatus"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/config": {
+      "get": {
+        "summary": "Get application configuration",
+        "description": "Retrieve the current application configuration",
+        "tags": ["Configuration"],
+        "responses": {
+          "200": {
+            "description": "Configuration retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppConfig"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update application configuration",
+        "description": "Update the application configuration (admin only)",
+        "tags": ["Configuration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppConfigUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Configuration updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppConfig"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (admin access required)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "message": {
+            "type": "string",
+            "example": "Forkable AI Framework API is running"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-13T10:30:00Z"
+          },
+          "version": {
+            "type": "string",
+            "example": "1.0.0"
+          }
+        }
+      },
+      "ImageProcessingRequest": {
+        "type": "object",
+        "required": ["imageData"],
+        "properties": {
+          "imageData": {
+            "type": "string",
+            "description": "Base64 encoded image data",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
+          },
+          "provider": {
+            "type": "string",
+            "description": "AI provider to use (optional, defaults to config)",
+            "enum": ["openai", "anthropic", "stability", "gemini"],
+            "example": "openai"
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "quality": {
+                "type": "string",
+                "enum": ["low", "medium", "high"],
+                "default": "high",
+                "example": "high"
+              },
+              "format": {
+                "type": "string",
+                "enum": ["jpeg", "png", "webp"],
+                "default": "jpeg",
+                "example": "jpeg"
+              },
+              "style": {
+                "type": "string",
+                "description": "Processing style (provider-specific)",
+                "example": "photorealistic"
+              }
+            }
+          }
+        }
+      },
+      "ImageProcessingResponse": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "Processed image data or description",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
+          },
+          "provider": {
+            "type": "string",
+            "description": "AI provider used for processing",
+            "example": "openai"
+          },
+          "processingTime": {
+            "type": "integer",
+            "description": "Processing time in milliseconds",
+            "example": 1500
+          },
+          "cost": {
+            "type": "number",
+            "description": "Cost of the operation in USD",
+            "example": 0.004
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "tokens": {
+                "type": "integer",
+                "description": "Number of tokens used",
+                "example": 100
+              },
+              "images": {
+                "type": "integer",
+                "description": "Number of images processed",
+                "example": 1
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional metadata about the processing",
+            "example": {
+              "model": "gpt-4",
+              "fallbackUsed": false
+            }
+          }
+        }
+      },
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "user_123456789"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "subscription": {
+            "type": "object",
+            "properties": {
+              "tier": {
+                "type": "string",
+                "enum": ["free", "pro", "enterprise"],
+                "example": "pro"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["active", "inactive", "cancelled"],
+                "example": "active"
+              },
+              "expiresAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2024-02-13T10:30:00Z"
+              }
+            }
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "requestsThisMonth": {
+                "type": "integer",
+                "example": 45
+              },
+              "requestsLimit": {
+                "type": "integer",
+                "example": 100
+              },
+              "creditsRemaining": {
+                "type": "number",
+                "example": 55.0
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T10:30:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-13T10:30:00Z"
+          }
+        }
+      },
+      "UserProfileUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "preferences": {
+            "type": "object",
+            "properties": {
+              "defaultProvider": {
+                "type": "string",
+                "enum": ["openai", "anthropic", "stability", "gemini"],
+                "example": "openai"
+              },
+              "notifications": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "push": {
+                    "type": "boolean",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "BillingStatus": {
+        "type": "object",
+        "properties": {
+          "subscription": {
+            "type": "object",
+            "properties": {
+              "tier": {
+                "type": "string",
+                "enum": ["free", "pro", "enterprise"],
+                "example": "pro"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["active", "inactive", "cancelled"],
+                "example": "active"
+              },
+              "expiresAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2024-02-13T10:30:00Z"
+              },
+              "autoRenew": {
+                "type": "boolean",
+                "example": true
+              }
+            }
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "currentPeriod": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2024-01-01T00:00:00Z"
+                  },
+                  "end": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2024-02-01T00:00:00Z"
+                  },
+                  "requests": {
+                    "type": "integer",
+                    "example": 45
+                  },
+                  "cost": {
+                    "type": "number",
+                    "example": 12.50
+                  }
+                }
+              },
+              "limits": {
+                "type": "object",
+                "properties": {
+                  "requests": {
+                    "type": "integer",
+                    "example": 100
+                  },
+                  "cost": {
+                    "type": "number",
+                    "example": 50.00
+                  }
+                }
+              }
+            }
+          },
+          "paymentMethod": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["card", "bank", "paypal"],
+                "example": "card"
+              },
+              "last4": {
+                "type": "string",
+                "example": "4242"
+              },
+              "expiresAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2025-12-31T23:59:59Z"
+              }
+            }
+          }
+        }
+      },
+      "SubscriptionUpgrade": {
+        "type": "object",
+        "required": ["tier"],
+        "properties": {
+          "tier": {
+            "type": "string",
+            "enum": ["pro", "enterprise"],
+            "example": "enterprise"
+          },
+          "paymentMethodId": {
+            "type": "string",
+            "description": "Payment method ID for the upgrade",
+            "example": "pm_123456789"
+          }
+        }
+      },
+      "AppConfig": {
+        "type": "object",
+        "properties": {
+          "ai": {
+            "type": "object",
+            "properties": {
+              "defaultProvider": {
+                "type": "string",
+                "enum": ["openai", "anthropic", "stability", "gemini"],
+                "example": "openai"
+              },
+              "fallbackOrder": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["openai", "anthropic", "stability", "gemini"]
+                },
+                "example": ["openai", "anthropic", "stability"]
+              },
+              "timeout": {
+                "type": "integer",
+                "description": "Timeout in milliseconds",
+                "example": 30000
+              }
+            }
+          },
+          "app": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "example": "AI Image Processor"
+              },
+              "description": {
+                "type": "string",
+                "example": "Transform your images with AI"
+              },
+              "version": {
+                "type": "string",
+                "example": "1.0.0"
+              }
+            }
+          },
+          "business": {
+            "type": "object",
+            "properties": {
+              "pricing": {
+                "type": "object",
+                "properties": {
+                  "free": {
+                    "type": "object",
+                    "properties": {
+                      "requests": {
+                        "type": "integer",
+                        "example": 5
+                      },
+                      "features": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["basic"]
+                      }
+                    }
+                  },
+                  "pro": {
+                    "type": "object",
+                    "properties": {
+                      "requests": {
+                        "type": "integer",
+                        "example": 100
+                      },
+                      "price": {
+                        "type": "number",
+                        "example": 9.99
+                      },
+                      "features": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["basic", "advanced"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "AppConfigUpdate": {
+        "type": "object",
+        "properties": {
+          "ai": {
+            "type": "object",
+            "properties": {
+              "defaultProvider": {
+                "type": "string",
+                "enum": ["openai", "anthropic", "stability", "gemini"]
+              },
+              "fallbackOrder": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["openai", "anthropic", "stability", "gemini"]
+                }
+              },
+              "timeout": {
+                "type": "integer"
+              }
+            }
+          },
+          "app": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "example": "VALIDATION_ERROR"
+              },
+              "message": {
+                "type": "string",
+                "example": "Invalid image format"
+              },
+              "details": {
+                "type": "object",
+                "description": "Additional error details",
+                "example": {
+                  "field": "imageData",
+                  "expected": "base64 string",
+                  "received": "undefined"
+                }
+              },
+              "timestamp": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2024-01-13T10:30:00Z"
+              },
+              "requestId": {
+                "type": "string",
+                "example": "req_123456789"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "System",
+      "description": "System health and status endpoints"
+    },
+    {
+      "name": "AI Processing",
+      "description": "AI image processing endpoints"
+    },
+    {
+      "name": "User Management",
+      "description": "User profile and authentication endpoints"
+    },
+    {
+      "name": "Billing",
+      "description": "Billing and subscription management endpoints"
+    },
+    {
+      "name": "Configuration",
+      "description": "Application configuration endpoints"
+    }
+  ]
+}

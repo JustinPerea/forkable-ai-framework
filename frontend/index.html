@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forkable AI - Create AI Apps in Minutes</title>
+    <meta name="description" content="One line of code changed = Entirely new AI application. See our live examples in action.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Basic Analytics Placeholder - Replace with actual tracking ID -->
+    <script>
+        // Simple analytics tracking
+        function trackEvent(event, data, source = 'frontend') {
+            console.log(`📊 Track ${source}:`, event, data);
+            // Store locally for now - will integrate GA later
+            const events = JSON.parse(localStorage.getItem('forkable_events') || '[]');
+            events.push({
+                event,
+                data,
+                source,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                url: window.location.href
+            });
+            localStorage.setItem('forkable_events', JSON.stringify(events));
+        }
+
+        // Track page load
+        trackEvent('page_load', 'production_app');
+    </script>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Create AI Apps in Minutes, Not Weeks</h1>
+                <p class="hero-subtitle">One line of code changed = Entirely new application</p>
+                <button class="cta-button" onclick="scrollToDemo()">Try Live Examples</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Section -->
+    <section class="demo-section" id="demo">
+        <div class="container">
+            <h2 class="section-title">See It In Action</h2>
+            <p class="section-subtitle">Two live applications, same codebase, different configurations</p>
+            
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <div class="demo-preview">
+                        <div class="preview-placeholder">
+                            <div class="preview-icon">🎨</div>
+                            <h3>Base Framework</h3>
+                            <p>AI Image Analysis</p>
+                        </div>
+                    </div>
+                    <div class="demo-info">
+                        <h4>AI Image Analyzer</h4>
+                        <p>Upload images and get detailed AI analysis with advanced processing capabilities.</p>
+                        <a href="https://forkable-ai-framework.vercel.app" target="_blank" class="demo-button" onclick="trackClick('base-app')">
+                            Try Base App →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="demo-card">
+                    <div class="demo-preview">
+                        <div class="preview-placeholder">
+                            <div class="preview-icon">🖍️</div>
+                            <h3>ColoringBook AI</h3>
+                            <p>Turn Images into Coloring Pages</p>
+                        </div>
+                    </div>
+                    <div class="demo-info">
+                        <h4>ColoringBook AI</h4>
+                        <p>Transform any photo into beautiful coloring book pages with AI-powered line art generation.</p>
+                        <a href="https://coloringbook-ai.vercel.app" target="_blank" class="demo-button" onclick="trackClick('coloringbook-app')">
+                            Try ColoringBook AI →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Start with Base Framework</h3>
+                    <p>Begin with our fully-functional AI application foundation</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Change Configuration File</h3>
+                    <p>Modify a simple config file to define your app's behavior</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Deploy New Specialized App</h3>
+                    <p>Launch your customized AI application in minutes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Email Signup Section -->
+    <section class="signup-section">
+        <div class="container">
+            <div class="signup-content">
+                <h2>Get Early Access</h2>
+                <p>Be the first to know when Forkable AI launches publicly</p>
+                <form class="signup-form" id="signup-form">
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="Enter your email" required>
+                        <button type="submit" class="signup-button">Get Notified</button>
+                    </div>
+                </form>
+                <div id="signup-message" class="signup-message"></div>
+            </div>
+        </div>
+    </section>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

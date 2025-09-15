@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Test Image</title>
+</head>
+<body>
+    <canvas id="canvas" width="200" height="200" style="border: 1px solid #ccc;"></canvas>
+    <br><br>
+    <button onclick="downloadImage()">Download Test Image</button>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Draw a simple test image
+        ctx.fillStyle = '#FF6B6B';
+        ctx.fillRect(0, 0, 200, 200);
+
+        ctx.fillStyle = '#4ECDC4';
+        ctx.beginPath();
+        ctx.arc(100, 100, 60, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.fillStyle = '#45B7D1';
+        ctx.fillRect(70, 70, 60, 60);
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'test-image.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>

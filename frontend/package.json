@@ -1,0 +1,19 @@
+{
+  "name": "forkable-frontend",
+  "version": "1.0.0",
+  "description": "Enhanced web interface for Forkable AI Framework",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite dev --host"
+  },
+  "keywords": ["ai", "image-processing", "frontend", "configuration-driven"],
+  "author": "Forkable AI Framework",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^7.1.5"
+  }
+}
