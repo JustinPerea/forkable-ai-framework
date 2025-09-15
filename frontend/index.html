@@ -3,131 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forkable AI - Create AI Apps in Minutes</title>
-    <meta name="description" content="One line of code changed = Entirely new AI application. See our live examples in action.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Basic Analytics Placeholder - Replace with actual tracking ID -->
-    <script>
-        // Simple analytics tracking
-        function trackEvent(event, data, source = 'frontend') {
-            console.log(`📊 Track ${source}:`, event, data);
-            // Store locally for now - will integrate GA later
-            const events = JSON.parse(localStorage.getItem('forkable_events') || '[]');
-            events.push({
-                event,
-                data,
-                source,
-                timestamp: new Date().toISOString(),
-                userAgent: navigator.userAgent,
-                url: window.location.href
-            });
-            localStorage.setItem('forkable_events', JSON.stringify(events));
+    <title>Forkable AI Framework</title>
+    <meta name="description" content="AI-powered image processing and analysis">
+    <style>
+        :root {
+            --color-primary: #4F46E5;
+            --color-secondary: #10B981;
+            --color-accent: #F59E0B;
+            --color-success: #4caf50;
+            --color-error: #f44336;
+            --color-warning: #ff9800;
+            --color-text: #111827;
+            --color-text-light: #6B7280;
+            --color-bg: #F9FAFB;
+            --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
         }
 
-        // Track page load
-        trackEvent('page_load', 'production_app');
-    </script>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .app-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-tagline {
+            font-size: 1.2rem;
+            color: var(--color-text-light);
+            font-weight: 400;
+        }
+
+        .app-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .upload-section {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .file-input-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .file-input-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .file-name {
+            margin-top: 1rem;
+            font-weight: 500;
+            color: var(--color-text-light);
+        }
+
+        #preview-container {
+            margin-top: 1rem;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .process-button {
+            padding: 1rem 3rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .process-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .process-button:disabled {
+            background: #E5E7EB;
+            color: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #E5E7EB;
+            border-top: 4px solid var(--color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        .loading-text {
+            color: var(--color-text-light);
+            font-size: 1.1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .message-container {
+            max-width: 600px;
+            margin: 1rem auto;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .message-success {
+            background: #ECFDF5;
+            color: #047857;
+            border: 1px solid #A7F3D0;
+        }
+
+        .message-error {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+        }
+
+        .result-section {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-section h3 {
+            color: var(--color-text);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .result-description {
+            background: #F9FAFB;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        .result-description strong {
+            color: var(--color-primary);
+        }
+    </style>
 </head>
 <body>
-    <!-- Hero Section -->
-    <section class="hero">
+    <div id="app">
         <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Create AI Apps in Minutes, Not Weeks</h1>
-                <p class="hero-subtitle">One line of code changed = Entirely new application</p>
-                <button class="cta-button" onclick="scrollToDemo()">Try Live Examples</button>
-            </div>
+            <header class="app-header">
+                <h1 class="app-title">🎨 AI Image Analyzer</h1>
+                <p class="app-tagline">Upload images and get detailed AI analysis with advanced processing capabilities</p>
+            </header>
+
+            <main class="app-main">
+                <div class="upload-section">
+                    <div class="file-input-wrapper">
+                        <input type="file" id="image-input" class="file-input" accept="image/*">
+                        <button class="file-input-button" onclick="document.getElementById('image-input').click()">
+                            📷 Choose Your Image
+                        </button>
+                    </div>
+                    <div class="file-name" id="file-name"></div>
+                    <div id="preview-container"></div>
+                    </div>
+
+                <button id="process-button" class="process-button" disabled>
+                    🤖 Analyze Image
+                </button>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Analyzing your image with AI...</div>
+                </div>
+
+                <div id="message-container"></div>
+
+                <div class="result-section" id="result-section" style="display: none;">
+                    <h3>AI Analysis Result:</h3>
+                    <div id="result-description"></div>
+                </div>
+            </main>
         </div>
-    </section>
-
-    <!-- Live Demo Section -->
-    <section class="demo-section" id="demo">
-        <div class="container">
-            <h2 class="section-title">See It In Action</h2>
-            <p class="section-subtitle">Two live applications, same codebase, different configurations</p>
-            
-            <div class="demo-grid">
-                <div class="demo-card">
-                    <div class="demo-preview">
-                        <div class="preview-placeholder">
-                            <div class="preview-icon">🎨</div>
-                            <h3>Base Framework</h3>
-                            <p>AI Image Analysis</p>
-                        </div>
-                    </div>
-                    <div class="demo-info">
-                        <h4>AI Image Analyzer</h4>
-                        <p>Upload images and get detailed AI analysis with advanced processing capabilities.</p>
-                        <a href="https://forkable-ai-framework.vercel.app" target="_blank" class="demo-button" onclick="trackClick('base-app')">
-                            Try Base App →
-                        </a>
-                    </div>
                 </div>
 
-                <div class="demo-card">
-                    <div class="demo-preview">
-                        <div class="preview-placeholder">
-                            <div class="preview-icon">🖍️</div>
-                            <h3>ColoringBook AI</h3>
-                            <p>Turn Images into Coloring Pages</p>
-                        </div>
-                    </div>
-                    <div class="demo-info">
-                        <h4>ColoringBook AI</h4>
-                        <p>Transform any photo into beautiful coloring book pages with AI-powered line art generation.</p>
-                        <a href="https://coloringbook-ai.vercel.app" target="_blank" class="demo-button" onclick="trackClick('coloringbook-app')">
-                            Try ColoringBook AI →
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <script>
+        const API_BASE = window.location.origin + '/api';
 
-    <!-- How It Works Section -->
-    <section class="how-it-works">
-        <div class="container">
-            <h2 class="section-title">How It Works</h2>
-            <div class="steps-grid">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Start with Base Framework</h3>
-                    <p>Begin with our fully-functional AI application foundation</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Change Configuration File</h3>
-                    <p>Modify a simple config file to define your app's behavior</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Deploy New Specialized App</h3>
-                    <p>Launch your customized AI application in minutes</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        const imageInput = document.getElementById('image-input');
+        const processButton = document.getElementById('process-button');
+        const loading = document.getElementById('loading');
+        const fileNameDiv = document.getElementById('file-name');
+        const previewContainer = document.getElementById('preview-container');
+        const messageContainer = document.getElementById('message-container');
+        const resultSection = document.getElementById('result-section');
+        const resultDescription = document.getElementById('result-description');
 
-    <!-- Email Signup Section -->
-    <section class="signup-section">
-        <div class="container">
-            <div class="signup-content">
-                <h2>Get Early Access</h2>
-                <p>Be the first to know when Forkable AI launches publicly</p>
-                <form class="signup-form" id="signup-form">
-                    <div class="form-group">
-                        <input type="email" id="email" placeholder="Enter your email" required>
-                        <button type="submit" class="signup-button">Get Notified</button>
-                    </div>
-                </form>
-                <div id="signup-message" class="signup-message"></div>
-            </div>
-        </div>
-    </section>
+        let selectedImageData = null;
 
-    <script type="module" src="/src/main.js"></script>
+        imageInput.addEventListener('change', handleImageSelect);
+        processButton.addEventListener('click', processImage);
+
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                fileNameDiv.textContent = file.name;
+                processButton.disabled = false;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImageData = e.target.result;
+
+                    previewContainer.innerHTML = `
+                        <img src="${selectedImageData}" class="preview-image" alt="Preview">
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function processImage() {
+            if (!selectedImageData) {
+                showMessage('Please select an image first!', 'error');
+                return;
+            }
+
+            processButton.disabled = true;
+            loading.style.display = 'block';
+            messageContainer.innerHTML = '';
+            resultSection.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_BASE}/process-image`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        imageData: selectedImageData
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showResult(result);
+                    showMessage('Successfully analyzed your image! 🤖', 'success');
+                } else {
+                    throw new Error(result.error || 'Failed to process image');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Failed to analyze image. Please try again!', 'error');
+            } finally {
+                loading.style.display = 'none';
+                processButton.disabled = false;
+            }
+        }
+
+        function showResult(result) {
+            resultDescription.innerHTML = `
+                <div class="result-description">
+                    <strong>AI Analysis:</strong><br>
+                    ${result.description}
+                </div>
+            `;
+            resultSection.style.display = 'block';
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showMessage(message, type) {
+            messageContainer.innerHTML = `
+                <div class="message-container message-${type}">
+                    ${message}
+                </div>
+            `;
+        }
+
+        console.log('🎨 AI Image Analyzer initialized!');
+        console.log('Upload an image to get detailed AI analysis!');
+    </script>
 </body>
 </html>
